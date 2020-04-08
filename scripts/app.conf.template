@@ -1,0 +1,3 @@
+$HTTP["host"] =~ "^$APP_HOST_NAME$" {
+  server.document-root = "$APP_DOCUMENT_ROOT"
+}
