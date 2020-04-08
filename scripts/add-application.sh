@@ -2,7 +2,7 @@
 
 hostIPv4=192.168.0.250
 hostIPv6=
-scriptBase=/home/pi
+scriptBase=/home/pi/scripts
 configBase=/etc/lighttpd
 customConfigBase=$configBase/custom-apps
 appName=$1
@@ -18,7 +18,7 @@ echo ===============
 
 echo generate web server config
 mkdir -p $customConfigBase
-envsubst "$APP_HOST_NAME:$APP_DOCUMENT_ROOT" < $scriptBase/app.conf.template > $customConfigBase/"$appName".conf
+envsubst '$APP_HOST_NAME:$APP_DOCUMENT_ROOT' < $scriptBase/app.conf.template > $customConfigBase/"$appName".conf
 echo ===============
 
 echo create document root on "$documentRoot"
@@ -31,13 +31,17 @@ echo "include \"$customConfigBase/$appName.conf\"" >> $configBase/external.conf
 echo ===============
 
 echo add domain to pihole local.list
-$scriptBase/add-local-domain.sh "$APP_DOCUMENT_ROOT" "$APP_HOST_NAME" $hostIPv4 $hostIPv6
+$scriptBase/add-local-domain-name.sh "$APP_DOCUMENT_ROOT" "$APP_HOST_NAME" $hostIPv4 $hostIPv6
 echo ===============
 
 echo Remove environment variables
 unset APP_DOCUMENT_ROOT
 unset APP_HOST_NAME
 echo ===============
+
+echo Check external conf and list.local
+nano $configBase/external.conf
+nano /etc/pihole/local.list
 
 echo webserver config folder: $configBase
 ls -la $configBase
@@ -47,7 +51,4 @@ echo document root folder: $documentRootBase
 ls -la $documentRootBase
 echo ===============
 
-echo Check external conf and list.local
-nano $configBase/external.conf
-nano /etc/pihole/local.list
 echo Done. Now restart the webserver and DNS Resolver in pi-hole.

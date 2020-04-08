@@ -20,7 +20,7 @@ ipv4Entry="$3 $domainName"
 if [ -z "$4" ]; then
   ipv6Entry=""
 else
-  ipv6Entry=$4 $domainName
+  ipv6Entry="$4 $domainName"
 fi
 
 # Append
@@ -28,5 +28,4 @@ cat >>/etc/pihole/local.list <<EOL
 # Server $serverName
 $ipv4Entry
 $ipv6Entry
-
 EOL
